@@ -31,6 +31,10 @@
   "rnpm": {
     "android": {
       "packageInstance": "new TwilioVoicePackage()"
+    },
+    "commands": {
+      "prelink": "node_modules/react-native-twilio-programmable-voice/scripts/pre-link.sh",
+      "postlink": "node_modules/react-native-twilio-programmable-voice/scripts/post-link.sh"
     }
   },
   "author": {
