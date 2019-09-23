@@ -94,28 +94,28 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
     public static final String PREFERENCE_KEY = "com.hoxfon.react.TwilioVoice.PREFERENCE_FILE_KEY";
 
     private NotificationManager notificationManager;
-    private CallNotificationManager callNotificationManager;
-    private ProximityManager proximityManager;
+    public CallNotificationManager callNotificationManager;
+    public ProximityManager proximityManager;
 
     private String accessToken;
 
-    private String toNumber = "";
-    private String toName = "";
+    public String toNumber = "";
+    public String toName = "";
 
     static Map<String, Integer> callNotificationMap;
 
     private RegistrationListener registrationListener = registrationListener();
     private Call.Listener callListener = callListener();
 
-    private CallInvite activeCallInvite;
-    private Call activeCall;
+    public CallInvite activeCallInvite;
+    public Call activeCall;
 
     // this variable determines when to create missed calls notifications
-    private Boolean callAccepted = false;
+    public Boolean callAccepted = false;
 
     private AudioFocusRequest focusRequest;
-    private HeadsetManager headsetManager;
-    private EventManager eventManager;
+    public HeadsetManager headsetManager;
+    public EventManager eventManager;
 
     public TwilioVoiceModule(ReactApplicationContext reactContext,
     boolean shouldAskForMicPermission) {
@@ -212,7 +212,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         };
     }
 
-    private Call.Listener callListener() {
+    public Call.Listener callListener() {
         return new Call.Listener() {
             @Override
             public void onConnected(Call call) {
@@ -377,7 +377,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         // Ignored, required to implement ActivityEventListener for RN 0.33
     }
 
-    private void handleIncomingCallIntent(Intent intent) {
+    public void handleIncomingCallIntent(Intent intent) {
         if (intent == null || intent.getAction() == null) {
             Log.e(TAG, "handleIncomingCallIntent intent is null");
             return;
@@ -722,7 +722,11 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         audioManager.setSpeakerphoneOn(value);
     }
 
-    private void setAudioFocus() {
+    @ReactMethod
+    public void incoming(ReadableMap params) {
+    }
+
+    public void setAudioFocus() {
         if (audioManager == null) {
             return;
         }
@@ -758,7 +762,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
     }
 
-    private void unsetAudioFocus() {
+    public void unsetAudioFocus() {
         if (audioManager == null) {
             return;
         }
@@ -778,14 +782,13 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
     }
 
     private void requestPermissionForMicrophone() {
-        if (getCurrentActivity() != null) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(), Manifest.permission.RECORD_AUDIO)) {
-    //            Snackbar.make(coordinatorLayout,
-    //                    "Microphone permissions needed. Please allow in your application settings.",
-    //                    SNACKBAR_DURATION).show();
-            } else {
-                ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, MIC_PERMISSION_REQUEST_CODE);
-            }
-        }
+        // https://github.com/hoxfon/react-native-twilio-programmable-voice/issues/47
+        /* if (ActivityCompat.shouldShowRequestPermissionRationale(getCurrentActivity(), Manifest.permission.RECORD_AUDIO)) {
+//            Snackbar.make(coordinatorLayout,
+//                    "Microphone permissions needed. Please allow in your application settings.",
+//                    SNACKBAR_DURATION).show();
+        } else {
+            ActivityCompat.requestPermissions(getCurrentActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, MIC_PERMISSION_REQUEST_CODE);
+        } */
     }
 }
