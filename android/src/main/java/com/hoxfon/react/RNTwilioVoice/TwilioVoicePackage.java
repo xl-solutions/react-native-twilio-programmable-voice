@@ -13,6 +13,8 @@ import java.util.List;
 public class TwilioVoicePackage implements ReactPackage {
 
     private boolean mShouldAskForPermission;
+    private CallNotificationManager mCallNotificationManager;
+
     public TwilioVoicePackage() {
         mShouldAskForPermission = true;
     }
@@ -20,6 +22,12 @@ public class TwilioVoicePackage implements ReactPackage {
     public TwilioVoicePackage(boolean shouldAskForPermissions) {
         mShouldAskForPermission = shouldAskForPermissions;
     }
+
+    public TwilioVoicePackage(boolean shouldAskForPermissions, CallNotificationManager callNotificationManager) {
+        mShouldAskForPermission = shouldAskForPermissions;
+        mCallNotificationManager = callNotificationManager;
+    }
+
     // Deprecated in RN 0.47.0
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return Collections.emptyList();
@@ -33,7 +41,7 @@ public class TwilioVoicePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new TwilioVoiceModule(reactContext, mShouldAskForPermission));
+        modules.add(new TwilioVoiceModule(reactContext, mShouldAskForPermission, mCallNotificationManager));
         return modules;
     }
 }
