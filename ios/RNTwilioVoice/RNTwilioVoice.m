@@ -368,7 +368,7 @@ RCT_REMAP_METHOD(getActiveCall,
               // if equals to the one who is calling
               int _id = [[membership objectForKey: @"id"]intValue];
               if (_id == id) {
-                fullname = [item objectForKey: @"name"];
+                fullname = [membership objectForKey: @"name"];
               }
             }
         // }
