@@ -366,7 +366,8 @@ RCT_REMAP_METHOD(getActiveCall,
               // int _id = [[item objectForKey: @"id"]intValue];
               // NSDictionary *user = [item valueForKeyPath: @"user"];
               // if equals to the one who is calling
-              int _id = [[membership objectForKey: @"id"]intValue];
+              NSString *key = [type stringByAppendingString:@"_id"];
+              int _id = [[membership objectForKey: key]intValue];
               if (_id == id) {
                 fullname = [membership objectForKey: @"name"];
               }
