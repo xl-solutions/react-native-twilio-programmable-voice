@@ -344,37 +344,38 @@ RCT_REMAP_METHOD(getActiveCall,
 
   self.callInvite = callInvite;
 
-  [self jsonFromLocalRNStrogeForKey:@"persist:root" completion:^(NSDictionary* data,NSError* error) {
+  [self jsonFromLocalRNStrogeForKey:@"memberships" completion:^(NSDictionary* data,NSError* error) {
     if (data) {
       // getting the membership json [{\"id\": \"1\", \"name\":\"Aaa\"}, {\"id\": \"2\", \"name\":\"Bbb\"}]
-      NSString * memberships = [data valueForKeyPath: @"membership"];
+      // NSString * memberships = [data valueForKeyPath: @"membership"];
 
-      if (![memberships isKindOfClass:[NSNull class]]) {
+      // if (![memberships isKindOfClass:[NSNull class]]) {
         NSString *fullname;
-        NSData *jsonData = [memberships dataUsingEncoding:NSUTF8StringEncoding];
+        // NSData *jsonData = [memberships dataUsingEncoding:NSUTF8StringEncoding];
         NSError *e = nil;
-        NSMutableArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
+        // NSMutableArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&e];
         NSArray *from = [callInvite.from componentsSeparatedByString:@"_"]; // split("_");
         NSString *type = [[from[0] componentsSeparatedByString:@":"][1] lowercaseString]; // split(":");
         int id = [from[1] integerValue];
 
-        if (!jsonArray) {
-          NSLog(@"twilio: Error parsing JSON: %@", e);
-        } else {
-            for (NSDictionary *membership in jsonArray) {
-              NSDictionary *item = [membership valueForKeyPath: type];
-              int _id = [[item objectForKey: @"id"]intValue];
+        // if (!jsonArray) {
+        //   NSLog(@"twilio: Error parsing JSON: %@", e);
+        // } else {
+            for (NSDictionary *membership in data) {
+              // NSDictionary *item = [membership valueForKeyPath: type];
+              // int _id = [[item objectForKey: @"id"]intValue];
               // NSDictionary *user = [item valueForKeyPath: @"user"];
               // if equals to the one who is calling
+              int _id = [[membership objectForKey: @"id"]intValue];
               if (_id == id) {
                 fullname = [item objectForKey: @"name"];
               }
             }
-        }
+        // }
         [self reportIncomingCallFrom:fullname withUUID:callInvite.uuid];
-      } else {
-        [self reportIncomingCallFrom:callInvite.from withUUID:callInvite.uuid];
-      }
+      // } else {
+      //   [self reportIncomingCallFrom:callInvite.from withUUID:callInvite.uuid];
+      // }
     } else {
       NSLog(@"twilio: JSON Parsing Error: %@", error);
       [self reportIncomingCallFrom:callInvite.from withUUID:callInvite.uuid];
